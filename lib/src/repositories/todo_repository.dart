@@ -6,22 +6,21 @@ class TodoRepository {
   final url = 'https://jsonplaceholder.typicode.com/todos';
 
   TodoRepository([Dio? dio]) {
-    if (dio == null) {
-      this.dio = Dio();
-    } else {
-      this.dio = dio;
-    }
+    this.dio = dio ?? Dio();
   }
 
   Future<List<TodoModel>> fetchTodos() async {
     final response = await dio.get(url);
     final list = response.data as List;
-    List<TodoModel> todos = [];
 
-    for (var json in list) {
-      final todo = TodoModel.fromJson(json);
-      todos.add(todo);
-    }
-    return todos;
+    return list.map((json) => TodoModel.fromJson(json)).toList();
+
+    // modo manual de transformar a lista de json em objetos de Todo
+    // List<TodoModel> todos = [];
+    // for (var json in list) {
+    //   final todo = TodoModel.fromJson(json);
+    //   todos.add(todo);
+    // }
+    // return todos;
   }
 }
